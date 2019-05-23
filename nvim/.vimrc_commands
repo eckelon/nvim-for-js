@@ -1,0 +1,34 @@
+
+" Use `:Format` to format current buffer
+command! -nargs=0 Format :call CocAction('format')
+
+" Use `:Fold` to fold current buffer
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+command! -bang -nargs=* FindUnderCursor
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always '.shellescape(expand('<cword>')), 1,
+  \   <bang>0 ? fzf#vim#with_preview('up:60%')
+  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \   <bang>0)
+
+com! FormatHTML %!tidy --indent auto --indent-spaces 4 --wrap 200 --quiet yes --show-body-only auto --show-errors 0 --tidy-mark no --fix-uri no --drop-empty-elements no
+com! FormatJS   %!js-beautify --indent-size=4
+com! FormatJSON %!python -m json.tool
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+"https://stackoverflow.com/a/53481161
+function! s:ToggleBlame()
+    if &l:filetype ==# 'fugitiveblame'
+        close
+    else
+        Gblame
+    endif
+endfunction

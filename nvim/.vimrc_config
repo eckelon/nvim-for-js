@@ -1,0 +1,136 @@
+set encoding=UTF-8
+set completeopt-=noselect
+
+if has("gui_running")
+    set guifont=Fura\ Code:h14
+endif
+
+set termguicolors
+colorscheme onedark
+
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+let mapleader=","
+
+set clipboard=unnamed
+if has('unnamedplus')
+  set clipboard=unnamed,unnamedplus
+endif
+
+set gcr=a:blinkon0              "Disable cursor blink
+set hlsearch
+set ignorecase
+set mouse=a
+set nobackup
+set nowritebackup
+set noswapfile
+set backspace=indent,eol,start
+set hidden
+
+
+" disable folding by default...
+set nofoldenable
+
+set nowb
+set number
+set relativenumber
+set sessionoptions-=options  " Don't save options
+set statusline+=%#warningmsg#
+set statusline+=%*
+set wildignore+=*.pyc,node_modules,*.egg-info,*/*session.vim
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.class,*/dist/*
+set wildignore+=*.rar,*.war,*/target/*
+set wildignore+=**/*/node_modules/**/*
+set wildmenu
+set wildmode=list:longest
+set cmdheight=2
+set updatetime=300
+set shortmess+=c
+set signcolumn=yes
+
+" Highlight symbol under cursor on CursorHold
+autocmd CursorHold * silent call CocActionAsync('highlight')
+"quickfix window to open after any grep invocation
+autocmd QuickFixCmdPost *grep* cwindow
+
+autocmd FileType c,cpp,cs,java        setlocal commentstring=//\ %s
+autocmd FileType desktop              setlocal commentstring=#\ %s
+autocmd FileType sql                  setlocal commentstring=--\ %s
+autocmd FileType xdefaults            setlocal commentstring=!%s
+autocmd FileType git,gitcommit        setlocal foldmethod=syntax foldlevel=1
+
+augroup mygroup
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
+
+let g:vim_markdown_conceal = 0
+let g:fzf_action = {
+            \ 'ctrl-t': 'tab split',
+            \ 'ctrl-i': 'split',
+            \ 'ctrl-v': 'vsplit' }
+let g:fzf_layout = { 'down': '~20%' }
+let g:rg_command = '
+            \ rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --color "always"
+            \ -g "*.{js,php,phtml,styl,pug,jade,html,config,py,cpp,c,go,hs,rb,conf,fa,lst}"
+            \ -g "!{.config,.git,node_modules,vendor,build,yarn.lock,*.sty,*.bst,*.coffee,dist,setup,pub,dev,lib,.history,bower_components}/*" '
+" bind K to grep word under cursor
+" nnoremap <F3> :Rg! "\b<C-R><C-W>\b"<CR>:cw<CR>
+set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
+
+let g:myLang = 0
+let g:myLangList = ['nospell', 'en_us', 'es_es']
+
+set conceallevel=0
+au FocusLost * silent! wa
+
+" https://github.com/cfenollosa/dotfiles/blob/master/.vimrc
+if has("autocmd")
+    " Highlight TODO, FIXME, NOTE, etc.
+    "if v:version > 701
+    autocmd Syntax * call matchadd('Todo',  '\W\zs\(TODO\|FIXME\|CHANGED\|XXX\|BUG\|HACK\)')
+    autocmd Syntax * call matchadd('Debug', '\W\zs\(NOTE\|INFO\|IDEA\)')
+    "endf
+endif
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""
+" Tell vim to remember certain things when we exit
+" http://vim.wikia.com/wiki/VimTip80
+""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"  '10 : marks will be remembered for up to 10 previously edited files
+"  "100 : will save up to 100 lines for each register
+"  :20 : up to 20 lines of command-line history will be remembered
+"  % : saves and restores the buffer list
+"  n... : where to save the viminfo files
+set viminfo='10,\"100,:20,%,n~/.viminfo
+
+" when we reload, tell vim to restore the cursor to the saved position
+augroup JumpCursorOnEdit
+    au!
+    autocmd BufReadPost *
+                \ if expand("<afile>:p:h") !=? $TEMP |
+                \ if line("'\"") > 1 && line("'\"") <= line("$") |
+                \ let JumpCursorOnEdit_foo = line("'\"") |
+                \ let b:doopenfold = 1 |
+                \ if (foldlevel(JumpCursorOnEdit_foo) > foldlevel(JumpCursorOnEdit_foo - 1)) |
+                \ let JumpCursorOnEdit_foo = JumpCursorOnEdit_foo - 1 |
+                \ let b:doopenfold = 2 |
+                \ endif |
+                \ exe JumpCursorOnEdit_foo |
+                \ endif |
+                \ endif
+    " Need to postpone using "zv" until after reading the modelines.
+    autocmd BufWinEnter *
+                \ if exists("b:doopenfold") |
+                \ exe "normal zv" |
+                \ if(b:doopenfold > 1) |
+                \ exe "+".1 |
+                \ endif |
+                \ unlet b:doopenfold |
+                \ endif
+augroup END

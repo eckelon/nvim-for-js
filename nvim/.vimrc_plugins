@@ -1,0 +1,29 @@
+call plug#begin('~/.local/share/nvim/plugged')
+Plug 'airblade/vim-gitgutter'
+Plug 'gorodinskiy/vim-coloresque'
+Plug 'andymass/vim-matchup'
+Plug 'nestorsalceda/vim-strip-trailing-whitespaces'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }    " Install fzf for user
+Plug 'junegunn/fzf.vim'
+Plug 'junegunn/vim-slash'
+Plug 'Yggdroot/indentLine'           " highlighting 4sp indenting
+Plug 'mhinz/vim-signify'             " show VCS changes
+Plug 'sheerun/vim-polyglot'          " newer language support
+Plug 'editorconfig/editorconfig-vim' " editorconfig support
+Plug 'Townk/vim-autoclose'
+Plug 'alvan/vim-closetag'
+Plug 'ludovicchabant/vim-gutentags'
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
+Plug 'tpope/vim-sleuth'
+Plug 'tpope/vim-vinegar'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-git'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-sensible'
+Plug 'joshdick/onedark.vim'
+Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-eslint', {'do': 'yarn install --frozen-lockfile'}
+Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
+call plug#end()
